@@ -1,0 +1,89 @@
+def decodeString(s: str) -> str:
+        stack =[]
+
+        for i in range(len(s)):
+            if s[i] !="]":
+                stack.append(s[i])
+                print(stack)
+            else:
+
+                #for substring in []
+                substr = ""
+                while stack[-1]!= "[":
+                    substr = stack.pop() + substr
+                    print(substr)
+
+                # for closing bracket
+                stack.pop()
+
+                # for digit outside of bracket
+                k =""
+                while stack and stack[-1].isdigit():
+                    k= stack.pop() + k
+                    print(k)
+
+                stack.append(int(k) * substr)
+        
+        print(stack)
+        return "".join(stack)
+
+def maxProfit(self, prices: List[int]) -> int:
+    to_return = 0
+    min_price = 9999999
+    
+    for price in prices:
+        if price < min_price:
+            min_price = price
+        if price - min_price > to_return:
+            to_return = price - min_price
+        
+    return to_return
+
+def countCornerRectangles(self, grid: List[List[int]]) -> int:
+        m,n = len(grid), len(grid[0])
+        
+        ones_dict ={}
+        for i in range(m):
+            ones_dict[i] = set()
+            for j in range(n):
+                if grid[i][j] == 1:
+                    ones_dict[i].add(j)
+        
+        count_rect = 0 
+        for i in range(m):
+            for j in range(i+1, m):
+                curr_recs = len(ones_dict[i].intersection(ones_dict[j]))
+                count_rect += curr_recs * (curr_recs - 1) // 2
+        
+        return count_rect
+
+def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:
+            return False
+        if not root.left and not root.right and root.val != targetSum:
+            return False
+        
+        def DFS(root,sum_val,sums):
+            if not root.left and not root.right:
+                sum_val += root.val
+                sums.append(sum_val)
+            if root.left:
+                DFS(root.left, sum_val + root.val, sums)
+            if root.right:
+                DFS(root.right, sum_val + root.val, sums)
+            
+            return sums
+        
+        return True if targetSum in DFS(root,0,[]) else False
+
+def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if not root: return 0
+        if not root.left and not root.right: return 1
+        
+        max_depth = -99999
+        if root.left:
+            max_depth = max(max_depth, self.maxDepth(root.left))
+        if root.right:
+            max_depth = max(max_depth, self.maxDepth(root.right))
+        
+        return max_depth + 1
